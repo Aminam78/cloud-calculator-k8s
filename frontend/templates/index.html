@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K8s Calculator</title>
+    <!-- Link to the static CSS file -->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="card">
+        <h1>☁️ Cloud Calculator</h1>
+        <form method="POST">
+            <div class="input-group">
+                <input type="text" name="expression" placeholder="e.g. 12 * (5 + 2)" value="{{ expression }}" required autocomplete="off">
+            </div>
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if error %}
+            <div class="error-box">{{ error }}</div>
+        {% endif %}
+
+        {% if result is not none %}
+            <div class="result-box">
+                = {{ result }}
+            </div>
+        {% endif %}
+        
+        <div class="footer">Microservices on Kubernetes</div>
+    </div>
+</body>
+</html>
