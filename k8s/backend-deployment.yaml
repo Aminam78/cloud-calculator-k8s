@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+spec:
+  replicas: 2 # Scaled to 2 to demonstrate Load Balancing later (Project 1 Goal)
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: amirhosseinam78/calculator-backend:v1
+        imagePullPolicy: IfNotPresent # Uses local image if available
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REDIS_HOST
+          value: "redis-svc" # Connecting to Redis via Service Discovery

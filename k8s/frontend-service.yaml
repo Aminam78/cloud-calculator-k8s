@@ -1,0 +1,13 @@
+# Exposes the frontend to the outside world.
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80         # External port
+      targetPort: 8080 # Internal container port
+  type: LoadBalancer   # Simulates a cloud load balancer

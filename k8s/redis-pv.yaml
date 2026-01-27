@@ -1,0 +1,15 @@
+# PersistentVolume represents a physical storage resource in the cluster.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 256Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data" # Stores data on the Minikube node's filesystem
