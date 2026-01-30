@@ -81,37 +81,43 @@ cloud-calculator/
 * [Helm](https://helm.sh/)
 
 ### **Step 1: Bootstrap Cluster & Addons**
-
-minikube start \-p distributed-systems  
+```bash
+minikube startminikube start \-p distributed-systems  
 minikube addons enable ingress \-p distributed-systems
+```
 
 ### **Step 2: Deploy Database (PostgreSQL)**
 
 We use Helm to deploy a production-ready database.
-
+```bash
 helm repo add bitnami \[https://charts.bitnami.com/bitnami\](https://charts.bitnami.com/bitnami)  
 helm install my-postgres bitnami/postgresql \\  
   \--set persistence.enabled=true \\  
   \--set persistence.size=2Gi \\  
   \--set global.postgresql.auth.postgresPassword=password123
+```
 
 ### **Step 3: Deploy Microservices**
 
 Apply all Kubernetes manifests (Deployments, Services, Ingress):
 
+```bash
 kubectl apply \-f k8s/
+```
+### **Step 4: Access the Application (Port Forwarding)**
 
-### **Step 4: Network Setup (Ingress)**
+Due to network isolation in some environments (like WSL2), we use Port Forwarding to securely access the internal service from the host machine.
 
-1. Start the tunnel to assign an IP to Ingress:  
-   minikube tunnel \-p distributed-systems
+Run the following command in a separate terminal:
 
-2. Add the domain to your hosts file (/etc/hosts or C:\\Windows\\System32\\drivers\\etc\\hosts):  
-   127.0.0.1  calculator.local
+```bash
+   # Forwards local port 8080 to the Frontend Service port 80
+   kubectl port-forward service/frontend-svc 8080:80 --address 0.0.0.0
+```
 
 ### **Step 5: Usage**
 
-Open your browser and navigate to: [**http://calculator.local**](https://www.google.com/search?q=http://calculator.local)
+Open your browser and navigate to: http://localhost:8080
 
 ## **📬 Contact**
 
