@@ -8,7 +8,7 @@ This project was developed as the final assignment for the **Distributed Systems
 
 * **University:** Iran University of Science and Technology (IUST)  
 * **Degree:** M.Sc. in Computer Software Engineering  
-* **Student:** Amirhossein Amin Moghadam ([@Aminam78](https://github.com/Aminam78))
+* **Student:** Amirhossein Amin Moghaddam ([@Aminam78](https://github.com/Aminam78))
 
 ## **🏗 Architecture**
 
@@ -115,6 +115,6 @@ Open your browser and navigate to: [**http://calculator.local**](https://www.goo
 
 ## **📬 Contact**
 
-Created by **Amirhossein Amin Moghadam**.
+Created by **Amirhossein Amin Moghaddam**.
 
 * **GitHub:** [Aminam78](https://github.com/Aminam78)
