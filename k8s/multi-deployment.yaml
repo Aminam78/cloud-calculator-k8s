@@ -1,26 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deploy
+  name: multi-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: multi-service
   template:
     metadata:
       labels:
-        app: frontend
+        app: multi-service
     spec:
       containers:
-      - name: frontend
-        image: amirhosseinam78/calculator-frontend:v2
+      - name: multi-service
+        image: amirhosseinam78/calculator-multi:v1
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
-        env:
-        - name: ORCHESTRATOR_URL
-          value: "http://orchestrator-svc:5000"
+        - containerPort: 5002
         # Resource limits to prevent noisy neighbor issues and enable HPA
         resources:
           requests:

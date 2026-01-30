@@ -1,31 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deploy
+  name: add-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: add-service
   template:
     metadata:
       labels:
-        app: frontend
+        app: add-service
     spec:
       containers:
-      - name: frontend
-        image: amirhosseinam78/calculator-frontend:v2
+      - name: add-service
+        image: amirhosseinam78/calculator-add:v1
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
-        env:
-        - name: ORCHESTRATOR_URL
-          value: "http://orchestrator-svc:5000"
+        - containerPort: 5001
         # Resource limits to prevent noisy neighbor issues and enable HPA
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "100m"  # 0.1 CPU core
           limits:
             memory: "128Mi"
-            cpu: "250m"
+            cpu: "250m"  # 0.25 CPU core

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-svc
+  name: add-svc
 spec:
   selector:
-    app: frontend
+    app: add-service
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: 5001
+      targetPort: 5001
   type: ClusterIP
