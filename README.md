@@ -8,7 +8,7 @@ This project was developed as the final assignment for the **Distributed Systems
 
 * **University:** Iran University of Science and Technology (IUST)  
 * **Degree:** M.Sc. in Computer Software Engineering  
-* **Student:** Amirhossein Amin Moghaddam ([@Aminam78](https://github.com/Aminam78))
+* **Student:** Amirhossein Amin Moghadam ([@Aminam78](https://github.com/Aminam78))
 
 ## **🏗 Architecture**
 
@@ -33,17 +33,19 @@ The application is decomposed into **4 stateless microservices** and **1 statefu
 
 ### **🧩 System Diagram**
 
-graph TD  
-    User((User)) \--\>|HTTP/Host: calculator.local| Ingress\[NGINX Ingress\]  
-    Ingress \--\>|Route /| Frontend\[Frontend SVC\]  
-      
-    subgraph "Kubernetes Cluster"  
-        Frontend \--\>|POST /calculate| Orch\[Orchestrator SVC\]  
-          
-        Orch \--\>|Logic| Add\[Add SVC\]  
-        Orch \--\>|Logic| Multi\[Multi SVC\]  
-        Orch \--\>|Billing| DB\[(PostgreSQL)\]  
+```mermaid
+graph TD
+    User((User)) -->|HTTP/Host: calculator.local| Ingress[NGINX Ingress]
+    Ingress -->|Route /| Frontend[Frontend SVC]
+    
+    subgraph "Kubernetes Cluster"
+        Frontend -->|POST /calculate| Orch[Orchestrator SVC]
+        
+        Orch -->|Logic| Add[Add SVC]
+        Orch -->|Logic| Multi[Multi SVC]
+        Orch -->|Billing| DB[(PostgreSQL)]
     end
+ ```   
 
 ## **🛠 Tech Stack**
 
@@ -109,10 +111,10 @@ kubectl apply \-f k8s/
 
 ### **Step 5: Usage**
 
-Open your browser and navigate to: [**http://calculator.local**](http://calculator.local).
+Open your browser and navigate to: [**http://calculator.local**](https://www.google.com/search?q=http://calculator.local)
 
 ## **📬 Contact**
 
-Created by **Amirhossein Amin Moghaddam**.
+Created by **Amirhossein Amin Moghadam**.
 
 * **GitHub:** [Aminam78](https://github.com/Aminam78)
