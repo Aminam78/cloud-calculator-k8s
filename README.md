@@ -1,122 +1,132 @@
 # ☁️ Cloud Calculator (Microservices on Kubernetes)
 
-A distributed, microservices-based calculator application designed to perform mathematical operations in a cloud environment. This project demonstrates the implementation of a distributed system using **Docker**, **Kubernetes (Minikube)**, and **Python (Flask)**.
+A distributed, cloud-native calculator application designed with **Microservices Architecture** and deployed on **Kubernetes**. This project demonstrates advanced concepts such as Service Discovery, Layer 7 Routing (Ingress), Stateful Sets (Database), and Orchestration.
 
 ## 🎓 Academic Context
 This project was developed as the final assignment for the **Distributed Systems** course.
 
 * **University:** Iran University of Science and Technology (IUST)
 * **Degree:** M.Sc. in Computer Software Engineering
-* **Student:** Amirhossein Amin Moghadam ([@Aminam78](https://github.com/Aminam78))
+* **Student:** Amirhossein Amin Moghaddam ([@Aminam78](https://github.com/Aminam78))
 
 ---
 
 ## 🏗 Architecture
-The application is decomposed into independent microservices to ensure scalability, maintainability, and fault isolation:
+
+The application is decomposed into **4 stateless microservices** and **1 stateful database**, communicating via REST APIs:
 
 1.  **Frontend Service (UI):**
-    * A web-based interface built with **Flask** (Python) + HTML/CSS.
-    * Acts as a Gateway/Reverse Proxy.
-    * Accepts user input and communicates with the Backend service via HTTP requests.
-    * Exposed to the outside world via a **NodePort** Service.
+    * Serves the Web UI (Flask + HTML/CSS).
+    * Acts as the entry point for users via **Ingress**.
+    * Forwards user requests to the Orchestrator.
 
-2.  **Backend Service (Compute):**
-    * An API-based service built with **Flask** (Python).
-    * Performs the actual mathematical calculations.
-    * Internal service, not exposed directly to the public internet (ClusterIP).
+2.  **Orchestrator Service (The Brain):**
+    * Parses the mathematical expression.
+    * Manages business logic and billing.
+    * Delegates tasks to worker services.
+    * Connects to **PostgreSQL** to manage user credits.
 
-3.  **Database (Redis) & Scaling:** *(Planned/Bonus Features)*
-    * **Redis:** For persisting calculation history.
-    * **HPA:** Horizontal Pod Autoscaling for handling high traffic loads.
+3.  **Worker Services (Primitives):**
+    * **Add-Service:** Handles Addition (`+`) and Subtraction (`-`).
+    * **Multi-Service:** Handles Multiplication (`*`) and Division (`/`).
 
----
+4.  **Database (Persistence):**
+    * **PostgreSQL** deployed via **Helm**.
+    * Stores user credits and transaction history.
+    * Uses **PersistentVolume (PV)** for data durability.
 
-## 🛠 Tech Stack
+### 🧩 System Diagram
 
-* **Language:** Python 3.9
-* **Framework:** Flask
-* **Containerization:** Docker
-* **Orchestration:** Kubernetes (Minikube)
-* **Registry:** Docker Hub
-* **Version Control:** Git & GitHub
+```mermaid
+graph TD
+    User((User)) -->|HTTP/Host: calculator.local| Ingress[NGINX Ingress]
+    Ingress -->|Route /| Frontend[Frontend SVC]
+    
+    subgraph "Kubernetes Cluster"
+        Frontend -->|POST /calculate| Orch[Orchestrator SVC]
+        
+        Orch -->|Logic| Add[Add SVC]
+        Orch -->|Logic| Multi[Multi SVC]
+        Orch -->|Billing| DB[(PostgreSQL)]
+    end
+ ```   
+🛠 Tech Stack
+Language: Python 3.9 (Flask)
 
----
+Containerization: Docker
 
-## 📂 Project Structure
-```
+Orchestration: Kubernetes (Minikube)
+
+Networking: NGINX Ingress Controller, ClusterIP
+
+Database: PostgreSQL (Bitnami Helm Chart)
+
+Package Manager: Helm
+
+Version Control: Git & GitHub
+
+📂 Project Structure
+‍‍```‍‍‍‍‍Plaintext
 cloud-calculator/
-├── backend/                # Calculation Microservice
-│   ├── app.py
-│   ├── Dockerfile
-│   └── requirements.txt
-├── frontend/               # User Interface Microservice
-│   ├── app.py
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── static/             # CSS files
-│   └── templates/          # HTML files
+├── backend/
+│   ├── orchestrator/       # Logic & DB interaction
+│   ├── add_service/        # Worker (+ -)
+│   └── multi_service/      # Worker (* /)
+├── frontend/               # UI Service
 ├── k8s/                    # Kubernetes Manifests
-│   ├── backend.yaml        # Deployment & Service for Backend
-│   └── frontend.yaml       # Deployment & Service for Frontend
+│   ├── *-deployment.yaml   # Deployments with Resource Limits
+│   ├── *-service.yaml      # ClusterIP Services
+│   └── ingress.yaml        # Ingress Rules
 └── README.md
 ```
 
+🚀 Deployment Guide
+Prerequisites:
+Docker
 
-## 🚀 Deployment
+Minikube
 
-### Prerequisites
+Kubectl
 
-- [Docker](https://www.docker.com/)
-    
-- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
-    
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
-    
+Helm
 
-### Steps to Run
+Step 1: Bootstrap Cluster & Addons
 
-1. **Start Minikube:**
-    
- 
-    
-    ```Bash
-    minikube start
-    ```
-    
-2. **Apply Kubernetes Manifests:**
-    
-    Navigate to the project root and run:
-    ```Bash
-    kubectl apply -f k8s/backend.yaml
-    kubectl apply -f k8s/frontend.yaml
-    ```
-    
-3. **Check Status:**
-    
-    Ensure all pods are running:
-    
-    ```Bash
-    kubectl get pods
-    kubectl get svc
-    ```
-    
-4. **Access the Application:**
-    
-    Since the frontend is exposed via NodePort, use Minikube to get the URL:
-    
-    ```Bash
-    minikube service frontend-svc
-    ```
-    
+```Bash
+minikube start -p distributed-systems
+minikube addons enable ingress -p distributed-systems
+```
+Step 2: Deploy Database (PostgreSQL)
+We use Helm to deploy a production-ready database.
 
----
+```Bash
+helm repo add bitnami [https://charts.bitnami.com/bitnami](https://charts.bitnami.com/bitnami)
+helm install my-postgres bitnami/postgresql \
+  --set persistence.enabled=true \
+  --set persistence.size=2Gi \
+  --set global.postgresql.auth.postgresPassword=password123
+```
+Step 3: Deploy Microservices
+Apply all Kubernetes manifests (Deployments, Services, Ingress):
 
-## 📬 Contact
+```Bash
+kubectl apply -f k8s/
+Step 4: Network Setup (Ingress)
+Start the tunnel to assign an IP to Ingress:
+```
 
-Created by **Amirhossein Amin Moghaddam**.
+```Bash
+minikube tunnel -p distributed-systems
+Add the domain to your hosts file (/etc/hosts or C:\Windows\System32\drivers\etc\hosts):
+```
 
-Feel free to reach out for any questions regarding the implementation details.
+```Plaintext
+127.0.0.1  calculator.local
+```
+Step 5: Usage
+Open your browser and navigate to: http://calculator.local
 
-- **GitHub:** [Aminam78](https://github.com/Aminam78)
-    
-- **University:** [IUST](http://www.iust.ac.ir/)
+📬 Contact
+Created by Amirhossein Amin Moghadam.
+
+GitHub: Aminam78
