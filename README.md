@@ -119,6 +119,12 @@ Run the following command in a separate terminal:
 
 Open your browser and navigate to: http://localhost:8080
 
+### **🔮 Planned Features (Bonus Phase)**
+
+Database Integration: PostgreSQL for billing and transaction history.
+
+Auto-Scaling: Horizontal Pod Autoscaling (HPA) based on CPU load.
+
 ## **📬 Contact**
 
 Created by **Amirhossein Amin Moghaddam**.
