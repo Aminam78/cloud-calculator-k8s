@@ -14,17 +14,26 @@ spec:
     spec:
       containers:
       - name: orchestrator
-        image: amirhosseinam78/calculator-orchestrator:v1
-        imagePullPolicy: IfNotPresent
+        # Updated image with DB logic
+        image: amirhosseinam78/calculator-orchestrator:v2-db
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         env:
-        # Service Discovery configuration
+        # Service Discovery
         - name: ADD_SERVICE_URL
           value: "http://add-svc:5001"
         - name: MULTI_SERVICE_URL
           value: "http://multi-svc:5002"
-        # Resource limits to prevent noisy neighbor issues and enable HPA
+        # Database Connection Info (Matches Helm Install)
+        - name: DB_HOST
+          value: "my-postgres-postgresql" # DNS name created by Helm
+        - name: DB_NAME
+          value: "postgres"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASS
+          value: "password123"
         resources:
           requests:
             memory: "64Mi"
