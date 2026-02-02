@@ -90,11 +90,12 @@ minikube addons enable ingress \-p distributed-systems
 
 We use Helm to deploy a production-ready database.
 ```bash
-helm repo add bitnami \[https://charts.bitnami.com/bitnami\](https://charts.bitnami.com/bitnami)  
-helm install my-postgres bitnami/postgresql \\  
-  \--set persistence.enabled=true \\  
-  \--set persistence.size=2Gi \\  
-  \--set global.postgresql.auth.postgresPassword=password123
+helm repo add bitnami [https://charts.bitnami.com/bitnami](https://charts.bitnami.com/bitnami)
+helm install my-postgres bitnami/postgresql \
+  --set persistence.enabled=true \
+  --set persistence.size=2Gi \
+  --set global.postgresql.auth.postgresPassword=password123 \
+  --set volumePermissions.enabled=true
 ```
 
 ### **Step 3: Deploy Microservices**
@@ -117,11 +118,15 @@ Run the following command in a separate terminal:
 
 ### **Step 5: Usage**
 
-Open your browser and navigate to: http://localhost:8080
+Open browser at: http://localhost:8080
+
+Enter a username (e.g., admin).
+
+Enter an expression.
+
+See the result and updated balance.
 
 ### **🔮 Planned Features (Bonus Phase)**
-
-Database Integration: PostgreSQL for billing and transaction history.
 
 Auto-Scaling: Horizontal Pod Autoscaling (HPA) based on CPU load.
 
