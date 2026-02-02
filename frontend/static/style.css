@@ -43,6 +43,10 @@ input[type="text"] {
     transition: border-color 0.3s;
 }
 
+.input-group input {
+    background-color: #f8f9fa;
+}
+
 input[type="text"]:focus {
     border-color: #3498db;
     outline: none;
@@ -88,4 +92,11 @@ button:hover {
     margin-top: 20px;
     font-size: 0.8rem;
     color: #95a5a6;
+}
+
+.result-box div {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 8px;
+    font-weight: normal;
 }
