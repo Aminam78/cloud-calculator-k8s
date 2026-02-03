@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: orchestrator
-        # Updated image with DB logic
-        image: amirhosseinam78/calculator-orchestrator:v2-db
+        # Updated image with DB logic and Horizontal Scaling
+        image: amirhosseinam78/calculator-orchestrator:v3-scaling
         imagePullPolicy: Always
         ports:
         - containerPort: 5000

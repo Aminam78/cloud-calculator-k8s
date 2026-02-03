@@ -70,8 +70,7 @@ def process_billing(username, cost):
         # Auto-register user with 100 credits if new
         cur.execute("INSERT INTO credits (username, balance) VALUES (%s, %s) ON CONFLICT (username) DO NOTHING;", (username, 100))
         
-        # Check and Update Balance
-        # We use a single atomic update query
+        # Check and Update Balance (Atomic Update)
         cur.execute("""
             UPDATE credits 
             SET balance = balance - %s 
@@ -137,6 +136,10 @@ def solve_expression(tokens):
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
+    # --- ARTIFICIAL DELAY FOR SCALING DEMO ---
+    time.sleep(0.5)
+    # -----------------------------------------
+
     data = request.json
     expr = data.get('expression', '')
     username = data.get('username', 'guest')
