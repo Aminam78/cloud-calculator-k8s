@@ -15,7 +15,7 @@ spec:
       containers:
       - name: frontend
         # Updated image with Username input field
-        image: amirhosseinam78/calculator-frontend:v3-db
+        image: amirhosseinam78/calculator-frontend:v4-fix
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

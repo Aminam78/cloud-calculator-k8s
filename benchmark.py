@@ -1,37 +1,35 @@
 import requests
 import time
-import threading
 from concurrent.futures import ThreadPoolExecutor
 
-URL = "http://localhost:8080" # Portforward to your cloud-calculator instance
-TOTAL_REQUESTS = 40          # All Requests to send
-CONCURRENT_USERS = 10        # Concurrent requests
+URL = "http://localhost:8080" # Frontend port-forwarded service
+TOTAL_REQUESTS = 50           # All requests to send
+CONCURRENT_THREADS = 50       # They are all concourrent
 
 def send_request(i):
     try:
-        # Simple Calculation 
-        payload = {"username": "bench", "expression": "2*2"}
         start = time.time()
-        resp = requests.post(f"{URL}/calculate", json=payload)
-        latency = time.time() - start
-        return latency
+        # A simple calculation request
+        requests.post(f"{URL}/calculate", json={"expression": "2*2+2", "username": "benchmark"}, timeout=5)
+        return time.time() - start
     except Exception as e:
         return None
 
-print(f"🚀 Starting Benchmark: {TOTAL_REQUESTS} requests ({CONCURRENT_USERS} concurrent)...")
+print(f"🚀 Starting Load Test: {TOTAL_REQUESTS} parallel requests...")
 print("-" * 40)
 
-start_time = time.time()
+global_start = time.time()
 
-# Send requests concurrently
-with ThreadPoolExecutor(max_workers=CONCURRENT_USERS) as executor:
+# Send all requests concurrently
+with ThreadPoolExecutor(max_workers=CONCURRENT_THREADS) as executor:
     results = list(executor.map(send_request, range(TOTAL_REQUESTS)))
 
-duration = time.time() - start_time
+total_time = time.time() - global_start
 successful = len([r for r in results if r is not None])
-rps = successful / duration
+rps = successful / total_time
 
-print("-" * 40)
-print(f"✅ Finished in: {duration:.2f} seconds")
-print(f"⚡ Throughput:  {rps:.2f} Requests/Second")
+print(f"📊 Results:")
+print(f"✅ Successful Requests: {successful}/{TOTAL_REQUESTS}")
+print(f"⏱️  Total Time Taken:   {total_time:.2f} seconds")
+print(f"⚡ System Throughput:  {rps:.2f} Req/Sec")
 print("-" * 40)
