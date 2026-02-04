@@ -3,29 +3,35 @@ import time
 import threading
 from concurrent.futures import ThreadPoolExecutor
 
-URL = "http://localhost:8080" # Port-forwarded address of the orchestrator service
-TOTAL_REQUESTS = 50  # All requests to send
-CONCURRENCY = 10     # Number of concurrent threads
+URL = "http://localhost:8080" # Portforward to your cloud-calculator instance
+TOTAL_REQUESTS = 40          # All Requests to send
+CONCURRENT_USERS = 10        # Concurrent requests
 
 def send_request(i):
     try:
-        payload = {"username": "bench-user", "expression": "2 * 2"}
+        # Simple Calculation 
+        payload = {"username": "bench", "expression": "2*2"}
         start = time.time()
-        requests.post(URL, json=payload)
-        return time.time() - start
-    except:
-        return 0
+        resp = requests.post(f"{URL}/calculate", json=payload)
+        latency = time.time() - start
+        return latency
+    except Exception as e:
+        return None
 
-print(f"🚀 Starting Benchmark: {TOTAL_REQUESTS} requests...")
+print(f"🚀 Starting Benchmark: {TOTAL_REQUESTS} requests ({CONCURRENT_USERS} concurrent)...")
+print("-" * 40)
+
 start_time = time.time()
 
-with ThreadPoolExecutor(max_workers=CONCURRENCY) as executor:
-    list(executor.map(send_request, range(TOTAL_REQUESTS)))
+# Send requests concurrently
+with ThreadPoolExecutor(max_workers=CONCURRENT_USERS) as executor:
+    results = list(executor.map(send_request, range(TOTAL_REQUESTS)))
 
 duration = time.time() - start_time
-rps = TOTAL_REQUESTS / duration
+successful = len([r for r in results if r is not None])
+rps = successful / duration
 
-print("\n" + "="*30)
-print(f"⏱️  Total Time: {duration:.2f} seconds")
-print(f"⚡ Throughput: {rps:.2f} Requests/Second")
-print("="*30)
+print("-" * 40)
+print(f"✅ Finished in: {duration:.2f} seconds")
+print(f"⚡ Throughput:  {rps:.2f} Requests/Second")
+print("-" * 40)
