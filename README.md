@@ -126,9 +126,35 @@ Enter an expression.
 
 See the result and updated balance.
 
-### **🔮 Planned Features (Bonus Phase)**
+## 📈 **Bonus Features Implemented**
 
-Auto-Scaling: Horizontal Pod Autoscaling (HPA) based on CPU load.
+### 1. Database & Billing (15%)
+
+- Integrated **PostgreSQL** to store user credits.
+    
+- Implemented billing logic (deducting costs per operation).
+    
+- Data persistence ensured via PVC.
+
+### 2. Horizontal Scaling Demo (15%)
+
+We demonstrated the system's ability to handle increased load by scaling replicas.
+
+Benchmark Script: final_benchmark.py sends 50 concurrent requests.
+
+Scenario:
+
+1 Replica: Low throughput, high latency (Bottleneck).
+
+5 Replicas: High throughput, low latency (Parallel Processing).
+
+- How to run the benchmark:
+
+```bash
+# 1. Ensure port-forward is running on port 8080
+# 2. Run the script
+python final_benchmark.py
+```
 
 ## **📬 Contact**
 
