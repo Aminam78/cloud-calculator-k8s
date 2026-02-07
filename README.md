@@ -140,7 +140,7 @@ See the result and updated balance.
 
 We demonstrated the system's ability to handle increased load by scaling replicas.
 
-Benchmark Script: final_benchmark.py sends 50 concurrent requests.
+Benchmark Script: benchmark.py sends 50 concurrent requests.
 
 Scenario:
 
@@ -153,7 +153,7 @@ Scenario:
 ```bash
 # 1. Ensure port-forward is running on port 8080
 # 2. Run the script
-python final_benchmark.py
+python benchmark.py
 ```
 
 ## **📬 Contact**
